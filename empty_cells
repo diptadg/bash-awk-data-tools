@@ -1,1 +1,38 @@
-#placeholder for empty_cells script
+#!/bin/bash
+
+# Check if the correct number of arguments is provided (file and separator)
+if [[ $# -ne 2 ]]; then
+    echo "Usage: <file> <separator>"  2>dev/null
+    exit 1
+fi
+
+# Check if the specified file exists
+if [[ ! -f "$1" ]]; then
+    echo "Error: File $1 not found."  2>dev/null
+    exit 1
+fi
+
+# Read the first line of the file (column titles) and split it into an array
+IFS="$2" read -r -a column_titles < "$1"
+num_columns=${#column_titles[@]}  # Get the number of columns based on the title line
+
+# Initialize an array to keep track of empty cell counts for each column
+for ((i = 0; i < num_columns; i++)); do
+    empty_counts[i]=0
+done
+
+# Read through the rest of the file (skipping the first line with titles)
+# and check each cell to see if it's empty
+while IFS="$2" read -r -a line; do
+    for ((i = 0; i < num_columns; i++)); do
+        # Check if the current cell is empty or just contains spaces
+        if [[ -z "${line[i]}" || "${line[i]}" =~ ^[:space:]*$ ]]; then
+            ((empty_counts[i]++))  # Increment the empty count for this column
+        fi
+    done
+done < <(tail -n +2 "$1")  # Skip the header line and process remaining data
+
+# Output the number of empty cells for each column
+for ((i = 0; i < num_columns; i++)); do
+    echo "${column_titles[i]}" "${empty_counts[i]}" 2>dev/null
+done
