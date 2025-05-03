@@ -32,16 +32,16 @@ while IFS= read -r line; do
       fi
     # Perform transformations on the line
     # Replace the separator with a tab character
-    transformed_line=$(echo "$transformed_line" | tr "$2" '\t')
+    transformed_line=$(echo "$other_lines" | tr "$2" '\t')
 
     # Convert Microsoft line endings (CRLF) to Unix line endings (LF)
-    transformed_line=$(echo "$transformed_line" | tr -d '\r')
+    transformed_line=$(echo "$other_lines" | tr -d '\r')
 
     # Convert decimal point to comma
-    transformed_line=$(echo "$transformed_line" | tr '.' ',')
+    transformed_line=$(echo "$other_lines" | tr '.' ',')
 
     # Remove non-ASCII characters
-    transformed_line=$(echo "$transformed_line" | tr -cd '\11\12\15\40-\176')
+    transformed_line=$(echo "$other_lines" | tr -cd '\11\12\15\40-\176')
 
     echo "$transformed_line"
 done < "$1" > cleaned_file.tsv
