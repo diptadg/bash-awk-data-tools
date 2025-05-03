@@ -24,9 +24,9 @@ while IFS= read -r line; do
       # Split the line into ID and the rest of the line
       IFS="$2" read -r id other_lines <<< "$line"  
     # Check if the first field (ID) is empty or invalid
-      if [ -z "$id" ] || [[ ! "$id" =~ [0-9]*$ ]]; then
+      if [ -z "$id" ] || [[ ! "$id" =~ ^[0-9]+$ ]]; then
         # Increment the ID
-        (new_id++)
+        ((new_id++))
         # Update the first field with the new ID
         id="$new_id"
       fi
