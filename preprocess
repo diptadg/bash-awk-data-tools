@@ -1,1 +1,47 @@
-#placeholder for preprocess script
+#!/bin/bash
+
+# Check if the correct number of arguments is provided (file)
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <file> <separator>" 2> /dev/null
+    exit 1
+fi
+# Check if the file exists and is not empty
+if [ ! -s "$1" ]; then
+    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/null
+    exit 1
+fi
+# Check if the file is a regular file
+if [ ! -f "$1" ]; then
+    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    exit 1
+fi
+
+# Determine highest ID
+new_id=$(awk -F "$2" 'NR > 1 print $1' "$1" | sort -n | tail -n 1)
+
+# Read the input file line by line
+while IFS= read -r line; do
+      # Split the line into ID and the rest of the line
+      IFS="$2" read -r id other_lines <<< "$line"  
+    # Check if the first field (ID) is empty or invalid
+      if [ -z "$id" ] || [[ ! "$id" =~ [0-9]*$ ]]; then
+        # Increment the ID
+        (new_id++)
+        # Update the first field with the new ID
+        id="$new_id"
+      fi
+    # Perform transformations on the line
+    # Replace the separator with a tab character
+    transformed_line=$(echo "$transformed_line" | tr "$2" '\t')
+
+    # Convert Microsoft line endings (CRLF) to Unix line endings (LF)
+    transformed_line=$(echo "$transformed_line" | tr -d '\r')
+
+    # Convert decimal point to comma
+    transformed_line=$(echo "$transformed_line" | tr '.' ',')
+
+    # Remove non-ASCII characters
+    transformed_line=$(echo "$transformed_line" | tr -cd '\11\12\15\40-\176')
+
+    echo "$transformed_line"
+done < "$1" > cleaned_file.tsv
