@@ -32,7 +32,7 @@ while IFS= read -r line; do
       fi
     # Perform transformations on the line
     # Replace the separator with a tab character
-    transformed_line=$(echo "$other_lines" | tr "$2" '\t')
+    transformed_line=$(echo "$other_lines" | tr ";" '\t')
 
     # Convert Microsoft line endings (CRLF) to Unix line endings (LF)
     transformed_line=$(echo "$other_lines" | tr -d '\r')
