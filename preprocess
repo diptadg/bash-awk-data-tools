@@ -22,7 +22,7 @@ new_id=$(awk -F "$2" 'NR > 1 {print $1}' "$1" | sort -n | tail -n 1)
 # Read the input file line by line
 while IFS= read -r line; do
       # Split the line into ID and the rest of the line
-      IFS="$2" read -r id other_lines <<< "$line"  
+      IFS=";" read -r id other_lines <<< "$line"  
     # Check if the first field (ID) is empty or invalid
       if [ -z "$id" ] || [[ ! "$id" =~ ^[0-9]+$ ]]; then
         # Increment the ID
@@ -31,17 +31,9 @@ while IFS= read -r line; do
         id="$new_id"
       fi
     # Perform transformations on the line
-    # Replace the separator with a tab character
-    transformed_line=$(echo "$other_lines" | tr ";" '\t')
+  # Replace semicolons with tabs, convert Microsoft line endings to Unix line endings, replace dots with commas, remove NON-ASCII characters
+    transformed_line=$(echo "$other_lines" | tr ';' '\t' | tr -d '\r' | tr '.' ',' | tr -cd '\11\12\15\40-\176')
 
-    # Convert Microsoft line endings (CRLF) to Unix line endings (LF)
-    transformed_line=$(echo "$other_lines" | tr -d '\r')
-
-    # Convert decimal point to comma
-    transformed_line=$(echo "$other_lines" | tr '.' ',')
-
-    # Remove non-ASCII characters
-    transformed_line=$(echo "$other_lines" | tr -cd '\11\12\15\40-\176')
-
-    echo "$transformed_line"
+  # Output the id column followed by the transformed lines
+  echo -e "${id}\t${transformed_line}"
 done < "$1" > cleaned_file.tsv
