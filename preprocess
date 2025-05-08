@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Check if the correct number of arguments is provided (file)
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 <file> <separator>" 2> /dev/null
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <file>" 2> /dev/null
     exit 1
 fi
 # Check if the file exists and is not empty
