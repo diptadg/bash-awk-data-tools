@@ -17,14 +17,14 @@ if [ ! -f "$1" ]; then
 fi
 
 # Determine highest ID
-new_id=$(awk -F "$2" 'NR > 1 {print $1}' "$1" | sort -n | tail -n 1)
+new_id=$(awk -F ";" 'NR > 1 {print $1}' "$1" | sort -n | tail -n 1)
 
 # Read the input file line by line
 while IFS= read -r line; do
       # Split the line into ID and the rest of the line
       IFS=";" read -r id other_lines <<< "$line"  
-    # Check if the first field (ID) is empty or invalid
-      if [ -z "$id" ] || [[ ! "$id" =~ ^[0-9]+$ ]]; then
+    # Check if the first field (ID) is empty
+      if [ -z "$id" ]; then
         # Increment the ID
         ((new_id++))
         # Update the first field with the new ID
