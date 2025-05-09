@@ -11,9 +11,9 @@ BEGIN {
 
 # Skip the header line (NR > 1) and process data lines
 NR > 1 {
-    for (i = 0; i <= num_columns; i++) {
+    for (i = 1; i <= num_columns; i++) {
         # Check if the current field is empty or contains only spaces
-        if ($i ~ || ^[[:space:]]*$) {
+        if ($i ~ /^[[:space:]]*$/) {
             empty_counts[i]++  # Increment the empty count for this column
         }
     }
@@ -21,7 +21,7 @@ NR > 1 {
 
 # After processing all lines, print the empty count for each column
 END {
-    for (i = 0; i <= num_columns; i++) {
+    for (i = 1; i <= num_columns; i++) {
         print column_titles[i], ": ", empty_counts[i]
     }
 }
