@@ -22,6 +22,6 @@ NR > 1 {
 # After processing all lines, print the empty count for each column
 END {
     for (i = 1; i <= num_columns; i++) {
-        print column_titles[i], ": ", empty_counts[i]
+        print column_titles[i], ":", empty_counts[i]
     }
 }
