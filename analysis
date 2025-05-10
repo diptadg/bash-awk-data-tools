@@ -1,1 +1,40 @@
-#placeholder for analysis script
+#!/bin/bash
+
+#!/bin/bash
+
+# Check if the correct number of arguments is provided (file and separator)
+if [[ $# -ne 1 ]]; then
+    echo "Usage: <file>"  2> /dev/null
+    exit 1
+fi
+
+# Check if the specified file exists
+if [[ ! -f "$1" ]]; then
+    echo "Error: File $1 not found." 2> /dev/null
+    exit 1
+fi
+# Check if the file is a regular file
+if [ ! -f "$1" ]; then
+    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    exit 1
+fi
+
+# MOST POPULAR GAME MECHANICS
+# I used tr to replace the commas with new lines 
+# I used sed to remove leading and trailing spaces
+# I used grep to remove empty lines
+# Finally, I used awk again at the end again to pipe the second and 3rd outputs only
+most_popular_game_mechanics=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
+# Get the count of the most popular game mechanics
+# I used the same technique as above but I only printed the first column
+most_popular_game_mechanics_count=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
+
+# MOST POPULAR DOMAINS
+# same technique as most popular game mechanics
+most_popular_domains=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}')
+# Get the count of the most popular domains
+# I used the same technique as above but I only printed the first column
+most_popular_domains_count=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
+# Print the most popular game mechanics
+echo "The most popular game mechanics is $most_popular_game_mechanics found in $most_popular_game_mechanics_count games"
+echo "The most popular domains is $most_popular_domains found in $most_popular_domains_count games"
