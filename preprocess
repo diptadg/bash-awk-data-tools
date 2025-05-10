@@ -30,10 +30,18 @@ while IFS= read -r line; do
         # Update the first field with the new ID
         id="$new_id"
       fi
-    # Perform transformations on the line
-  # Replace semicolons with tabs, convert Microsoft line endings to Unix line endings, replace dots with commas, remove NON-ASCII characters
-    transformed_line=$(echo "$other_lines" | tr ';' '\t' | tr -d '\r' | tr '.' ',' | tr -cd '\11\12\15\40-\176')
+  # Perform transformations on the line
+  IFS=";" read -r -a cols <<< "$other_lines"
+  # Process each column: replace commas with dots except for columns Mechanics and Domains (index 12 and 13)
+  for i in "${!cols[@]}"; do
+    # Convert Microsoft line endings to Unix and remove NON-ASCII characters
+    cols[i]=$(echo "${cols[$i]}" | tr ';' '\t' | tr -d '\r' | tr -cd '\11\12\15\40-\176')
+    if [ $((i+1)) -ne 12 ] && [ $((i+1)) -ne 13 ]; then
+      cols[i]=$(echo "${cols[$i]}" | tr ',' '.')
+    fi
+  done
 
-  # Output the id column followed by the transformed lines
-  echo -e "${id}\t${transformed_line}"
+  # Output the id column and join the cols array separated by tabs in the final output
+  echo -e "${id}\t$(IFS=$'\t'; echo "${cols[*]}")"
 done < "$1" > cleaned_file.tsv
+echo "Processed file saved as cleaned_file.tsv"
