@@ -14,7 +14,7 @@ BEGIN {
 # Skip the header line (NR > 1) and process data lines
 NR > 1 {
     for (i = 1; i <= num_columns; i++) {
-        # Check if the current field is empty or contains only spaces
+        # Check if the current field is empty or contains only spaces (Reference: https://stackoverflow.com/questions/559363/matching-a-space-in-regex)
         if ($i ~ /^[[:space:]]*$/) {
             empty_counts[i]++  # Increment the empty cell count for this column
         }
