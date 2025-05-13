@@ -23,11 +23,30 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
+# Check if the file is a tab-seperated file
+# I used head to get the first line of the file
+# I used grep to check if the first line of the file contains a tab character. The -q option is used to suppress the output of grep.
+if ! head -1 "$1" | grep -q $'\t'; then
+    echo "Error: The specified input file $1 is not a tab-seperated file." 2> /dev/stderr
+    exit 1
+fi
+# Check if the Mechanics (13th column) and Domains (14th column) are present and not empty before proceeding
+if ! awk -F'\t' 'NR > 1 {if ($13 == "" || $14 == "") exit 1}' "$1"; then
+    echo "Error: The specified input file $1 does not contain valid game mechanics or domains." 2> /dev/stderr
+    exit 1
+fi
+# Check if the Year(3rd column), Average Rating (9th column), and Complexity (11th column) columns are present and not empty before proceeding
+if ! awk -F'\t' 'NR > 1 {if ($3 == "" || $9 == "" || $11 == "") exit 1}' "$1"; then
+    echo "Error: The specified input file $1 does not contain valid year, average rating, or complexity." 2> /dev/stderr
+    exit 1
+fi
+
 # MOST POPULAR GAME MECHANICS
 # I used awk to extract the 13th column (Mechanics) from the input file
 # I used the -F option to specify the tab character as the field separator
-# I used awk to remove leading and trailing spaces by using the command {$1=$1; print}
-# I used grep to remove empty lines
+# I used tr to replace the commas with new lines so each game mechanic is on a new line
+# I used awk to remove leading and trailing spaces by using the command {$1=$1; print} (Reference: https://stackoverflow.com/questions/9175801/how-to-remove-leading-and-trailing-whitespaces)
+# I used grep to remove empty lines (Reference: https://stackoverflow.com/questions/3432555/remove-blank-lines-with-grep)
 # Finally, I used awk again at the end again to pipe the second and 3rd outputs only
 most_popular_game_mechanics=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
 
@@ -49,7 +68,7 @@ echo "The most popular domains is $most_popular_domains found in $most_popular_d
 
 # CORRELATION BETWEEN YEAR AND AVERAGE RATING
 # I used awk to extract the 3rd column (Year) and the 9th column (Average Rating) from the input file
-# I used the formula for correlation coefficient: r = (n*xy - x*y)/sqrt((n*xx - x*x)*(n*yy - y*y))
+# I used this formula for correlation coefficient: r = (n*xy - x*y)/sqrt((n*xx - x*x)*(n*yy - y*y))
 corelation_year_rating="$(awk -F'\t' 'NR>1 {x+=$3; y+=$9; xx+=$3*$3; yy+=$9*$9; xy+=$3*$9; n++}
 END {
     printf "%.3f", (n*xy - x*y)/sqrt((n*xx - x*x)*(n*yy - y*y))
