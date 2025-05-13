@@ -1,19 +1,26 @@
 #!/bin/bash
 
+# This script counts the number of empty cells in a file and prints the results.
+# It takes two arguments: the path to the file and the separator used in the file.
+# The script uses a separate helper AWK script count_empty_cells.awk to process the file and count the empty cells.
+#
+# Usage: ./count_empty_cells.sh <file> '<separator>'
+# Authorship: Dipta Datta Gupta
+
 # Check if the correct number of arguments is provided (file and separator)
 if [[ $# -ne 2 ]]; then
-    echo "Usage: <file> <separator>"  2> /dev/null
+    echo "Usage: <file> '<separator>'"  2> /dev/stderr
     exit 1
 fi
 
 # Check if the specified file exists
 if [[ ! -f "$1" ]]; then
-    echo "Error: File $1 not found." 2> /dev/null
+    echo "Error: File $1 not found." 2> /dev/stderr
     exit 1
 fi
 # Check if the file is a regular file
 if [ ! -f "$1" ]; then
-    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    echo "Error: The specified input file $1 is not a regular file." 2> /dev/stderr
     exit 1
 fi
 

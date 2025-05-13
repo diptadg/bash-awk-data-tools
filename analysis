@@ -1,21 +1,25 @@
 #!/bin/bash
 
-#!/bin/bash
+# This script analyzes a cleaned TSV file containing board game data.
+# It calculates the most popular game mechanics and domains, and the correlation between year and average rating, and complexity and average rating.
+# It takes a single argument: the path to the cleaned TSV file.
+# Usage: ./analysis <file>
+# Authorship: Dipta Datta Gupta
 
 # Check if the correct number of arguments is provided (file and separator)
 if [[ $# -ne 1 ]]; then
-    echo "Usage: <file>"  2> /dev/null
+    echo "Usage: <file>"  2> /dev/stderr
     exit 1
 fi
 
 # Check if the specified file exists
 if [[ ! -f "$1" ]]; then
-    echo "Error: File $1 not found." 2> /dev/null
+    echo "Error: File $1 not found." 2> /dev/stderr
     exit 1
 fi
 # Check if the file is a regular file
 if [ ! -f "$1" ]; then
-    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    echo "Error: The specified input file $1 is not a regular file." 2> /dev/stderr
     exit 1
 fi
 

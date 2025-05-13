@@ -1,4 +1,6 @@
-# This script counts the empty cells for each column
+# This AWK script counts the empty cells for each column in the provided data file
+# This script is called from the empty_cells script having passed the file and separator as arguments
+# Authorship: Dipta Datta Gupta 
 BEGIN {
     # Set the field separator from the input argument in the main script
     FS = separator
@@ -14,12 +16,12 @@ NR > 1 {
     for (i = 1; i <= num_columns; i++) {
         # Check if the current field is empty or contains only spaces
         if ($i ~ /^[[:space:]]*$/) {
-            empty_counts[i]++  # Increment the empty count for this column
+            empty_counts[i]++  # Increment the empty cell count for this column
         }
     }
 }
 
-# After processing all lines, print the empty count for each column
+# After processing all lines, print the empty cell count for each column
 END {
     for (i = 1; i <= num_columns; i++) {
         print column_titles[i], ":", empty_counts[i]

@@ -1,18 +1,27 @@
 #!/bin/bash
 
+# This script processes a data file that has a semicolon ';' as the seperator to clean and transform the data.
+# It replaces semicolons with tabs, removes non-ASCII characters, and converts Microsoft line endings to Unix format.
+# It also handles empty IDs by incrementing them and ensuring they are unique.
+# The script outputs the cleaned data to a new file named "cleaned_file.tsv".
+
+# It takes a single argument: the path to the data file.
+# Usage: ./preprocess <file>
+# Authorship: Dipta Datta Gupta 
+
 # Check if the correct number of arguments is provided (file)
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 <file>" 2> /dev/null
+    echo "Usage: $0 <file>" 2> /dev/stderr
     exit 1
 fi
 # Check if the file exists and is not empty
 if [ ! -s "$1" ]; then
-    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/null
+    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/stderr
     exit 1
 fi
 # Check if the file is a regular file
 if [ ! -f "$1" ]; then
-    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    echo "Error: The specified input file $1 is not a regular file." 2> /dev/stderr
     exit 1
 fi
 
