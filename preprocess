@@ -30,8 +30,13 @@ new_id=$(awk -F ";" 'NR > 1 {print $1}' "$1" | sort -n | tail -n 1)
 
 # Read the input file line by line
 while IFS= read -r line; do
-      # Split the line into ID and the rest of the line
-      IFS=";" read -r id other_lines <<< "$line"  
+      # The line is split into two parts: id and other_lines
+      IFS=";" read -r id other_lines <<< "$line" 
+      # Check if the seperator is a semicolon before processing
+      if [[ "$line" != *";"* ]]; then
+        echo "Error: The input file $1 contains separators that are not semicolon (;). This script only takes semicolon-separated files" 2> /dev/stderr
+        exit 1
+      fi
     # Check if the first field (ID) is empty
       if [ -z "$id" ]; then
         # Increment the ID
