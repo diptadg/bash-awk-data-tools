@@ -13,9 +13,9 @@ if [[ $# -ne 2 ]]; then
     exit 1
 fi
 
-# Check if the file is empty
+# Check if the file exists and is not empty
 if [ ! -s "$1" ]; then
-    echo "Error: The specified input file $1 is empty." 2> /dev/stderr
+    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/stderr
     exit 1
 fi
 
@@ -27,7 +27,7 @@ fi
 
 # Check if its a proper separator in the input argument
 if [[ ! "$2" =~ ^(\;|,|$'\t')$ ]]; then
-    echo "Error: Separator must be a semicolon (;), comma (,), or tab." 2> /dev/stderr
+    echo "Error: Separator must be a semicolon (;), comma (,), or tab and must be enclosed using single quotes i.e. ';'" 2> /dev/stderr
     exit 1
 fi
 

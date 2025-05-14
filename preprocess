@@ -58,8 +58,10 @@ while IFS= read -r line; do
     fi
   done
 
-# Output the id column and join the cols array separated by tabs in the final output. Effectively, this will replace the semicolons with a tab separator
-  # IFS=$'\t' is used to set the internal field separator to tab
+# Output the id column and join the cols array separated by tabs in the final output.
+# Effectively, this will replace the semicolons with a tab separator (Reference: https://stackoverflow.com/questions/57627024/using-ifs-with-echo)
+  # The IFS variable is set to tab (IFS=$'\t') to ensure that the columns are joined with tabs
+  # The "${cols[*]}" expands to all elements of the array, separated by the first character of IFS
   # The echo command is used to print the id and the transformed columns
   # The -e option enables interpretation of backslash escapes
   echo -e "${id}\t$(IFS=$'\t'; echo "${cols[*]}")"

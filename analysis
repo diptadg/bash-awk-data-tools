@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# This script analyzes a cleaned TSV file containing board game data.
+# This script analyzes a cleaned tab-seperated file containing board game data.
 # It calculates the most popular game mechanics and domains, and the correlation between year and average rating, and complexity and average rating.
-# It takes a single argument: the path to the cleaned TSV file.
+# It takes a single argument: the path to the cleaned tab-separated .TSV file.
 # Usage: ./analysis <file>
 # Authorship: Dipta Datta Gupta
 
@@ -12,9 +12,9 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 
-# Check if the file is empty
+# Check if the file exists and is not empty
 if [ ! -s "$1" ]; then
-    echo "Error: The specified input file $1 is empty." 2> /dev/stderr
+    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/stderr
     exit 1
 fi
 
@@ -44,7 +44,7 @@ fi
 
 # MOST POPULAR GAME MECHANICS
 # I used awk to extract the 13th column (Mechanics) from the input file
-# I used the -F option to specify the tab character as the field separator
+# I used the -F option to specify the tab character (\t) as the field separator
 # I used tr to replace the commas with new lines so each game mechanic is on a new line
 # I used awk to remove leading and trailing spaces by using the command {$1=$1; print} (Reference: https://stackoverflow.com/questions/9175801/how-to-remove-leading-and-trailing-whitespaces)
 # I used grep to remove empty lines (Reference: https://stackoverflow.com/questions/3432555/remove-blank-lines-with-grep)
