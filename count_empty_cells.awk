@@ -9,6 +9,11 @@ BEGIN {
     getline header
     split(header, column_titles, FS)  # Split header into array using the separator
     num_columns = length(column_titles)  # Get the number of columns
+
+    # Initialize empty cell counts for all columns to 0
+    for (i = 1; i <= num_columns; i++) {
+        empty_counts[i] = 0
+    }
 }
 
 # Skip the header line (NR > 1) and process data lines
