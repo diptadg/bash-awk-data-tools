@@ -5,12 +5,6 @@ BEGIN {
     # Set the field separator from the input argument in the main script
     FS = separator
 
-    # Check if the separator exists in the header line
-    if (index(header, separator) == 0) {
-        print "Error: The specified separator ('" separator "') was not found in the file." > "/dev/stderr"
-        exit 1
-    }
-
     # Read the first line (column titles)
     getline header
     split(header, column_titles, FS)  # Split header into array using the separator

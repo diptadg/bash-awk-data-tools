@@ -26,8 +26,8 @@ if [ ! -f "$1" ]; then
 fi
 
 # Check if its a proper separator in the input argument
-if [[ ! "$2" =~ ^(\;|,|$'\t')$ ]]; then
-    echo "Error: Separator must be a semicolon (;), comma (,), or tab and must be enclosed using single quotes i.e. ';'" 2> /dev/stderr
+if [ "$2" != ";" ]; then
+    echo "Error: Separator must be a semicolon (;) and must be enclosed using single quotes i.e. ';'" 2> /dev/stderr
     exit 1
 fi
 
