@@ -34,7 +34,7 @@ while IFS= read -r line; do
       IFS=";" read -r id other_lines <<< "$line" 
       # Check if the seperator is a semicolon before processing
       if [[ "$line" != *";"* ]]; then
-        echo "Error: The input file $1 contains separators that are not semicolon (;). This script only takes semicolon-separated files" 2> /dev/stderr
+        echo "Error: The input file $1 contains separators that are not semicolon (;). This script only takes semicolon-separated files" >&2
         exit 1
       fi
     # Check if the first field (ID) is empty
@@ -47,7 +47,8 @@ while IFS= read -r line; do
   # Perform transformations on the line
   IFS=";" read -r -a cols <<< "$other_lines"
   # Process each column: Convert Microsoft line endings to Unix line endings and remove NON-ASCII characters
-  # I use "${!cols[@]}" to iterate over the indices of the cols array
+  # I use "${!cols[@]}" to iterate over the indices of the cols array 
+  # (Reference: https://stackoverflow.com/questions/6723426/looping-over-arrays-printing-both-index-and-value)
   for i in "${!cols[@]}"; do
     cols[i]=$(echo "${cols[$i]}" | tr ';' '\t' | tr -d '\r' | tr -cd '\11\12\15\40-\176')
     # For all columns except Mechanics and Domains columns (index: 12 and 13), replace commas with dots
