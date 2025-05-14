@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # This script processes a data file that has a semicolon ';' as the seperator to clean and transform the data.
-# It replaces semicolons with tabs, removes non-ASCII characters, and converts Microsoft line endings to Unix format.
+# It replaces semicolons with tabs for separators 
+# Converts floating-point numbers to use dots (.) instead of commas(,) for decimal places 
+# Converts Microsoft line endings to Unix format
+# Converts non-ASCII characters to ASCII.
 # It also handles empty IDs by incrementing them and ensuring they are unique.
 # The script outputs the cleaned data to a new file named "cleaned_file.tsv".
 
