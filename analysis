@@ -33,12 +33,12 @@ if ! head -1 "$1" | grep -q $'\t'; then
 fi
 # Check if the Mechanics (13th column) and Domains (14th column) are present and not empty before proceeding
 if ! awk -F'\t' 'NR > 1 {if ($13 == "" || $14 == "") exit 1}' "$1"; then
-    echo "Error: The specified input file $1 does not contain valid game mechanics or domains." 2> /dev/stderr
+    echo "Error: The specified input file $1 does not contain valid game mechanics or domain values." 2> /dev/stderr
     exit 1
 fi
 # Check if the Year(3rd column), Average Rating (9th column), and Complexity (11th column) columns are present and not empty before proceeding
 if ! awk -F'\t' 'NR > 1 {if ($3 == "" || $9 == "" || $11 == "") exit 1}' "$1"; then
-    echo "Error: The specified input file $1 does not contain valid year, average rating, or complexity." 2> /dev/stderr
+    echo "Error: The specified input file $1 does not contain valid year, average rating, or complexity values." 2> /dev/stderr
     exit 1
 fi
 
@@ -83,5 +83,5 @@ END {
 }' "$1")"
 
 # Print the correlation results
-echo -"The correlation between the year of publication and the average rating is $corelation_year_rating"
-echo -"The correlation between the complexity of a game and its average rating is $corelation_complexity_rating"
+echo "The correlation between the year of publication and the average rating is $corelation_year_rating"
+echo "The correlation between the complexity of a game and its average rating is $corelation_complexity_rating"
