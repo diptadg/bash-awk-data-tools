@@ -49,39 +49,39 @@ fi
 # I used awk to remove leading and trailing spaces by using the command {$1=$1; print} (Reference: https://stackoverflow.com/questions/9175801/how-to-remove-leading-and-trailing-whitespaces)
 # I used grep to remove empty lines (Reference: https://stackoverflow.com/questions/3432555/remove-blank-lines-with-grep)
 # Finally, I used awk again at the end again to pipe the second and 3rd outputs only
-most_popular_game_mechanics=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
+most_popular_game_mechanic=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
 
 # Get the count of the most popular game mechanic
 # I used the same technique as above but I used awk to pipe the 1st output only at the end to get the count of the most popular game mechanic
-most_popular_game_mechanics_count=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
+most_popular_game_mechanic_count=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
 
 # MOST POPULAR DOMAINS
 # same technique as most_popular_game_mechanics but I used the 14th column (Domains) instead
-most_popular_domains=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
+most_popular_domain=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
 
 # Get the count of the most popular domain
 # I used the same technique as most_popular_game_mechanics_count but I used the 14th column (Domains) instead
-most_popular_domains_count=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
+most_popular_domain_count=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
 
 # Print the results for the most popular game mechanics and domains
-echo "The most popular game mechanics is $most_popular_game_mechanics found in $most_popular_game_mechanics_count games"
-echo "The most popular domains is $most_popular_domains found in $most_popular_domains_count games"
+echo "The most popular game mechanic is $most_popular_game_mechanic found in $most_popular_game_mechanic_count games"
+echo "The most popular domain is $most_popular_domain found in $most_popular_domain_count games"
 
 # CORRELATION BETWEEN YEAR AND AVERAGE RATING
 # I used awk to extract the 3rd column (Year) and the 9th column (Average Rating) from the input file
 # I used this formula for correlation coefficient: r = (n*xy - x*y)/sqrt((n*xx - x*x)*(n*yy - y*y))
-corelation_year_rating="$(awk -F'\t' 'NR>1 {x+=$3; y+=$9; xx+=$3*$3; yy+=$9*$9; xy+=$3*$9; n++}
+correlation_year_rating="$(awk -F'\t' 'NR>1 {x+=$3; y+=$9; xx+=$3*$3; yy+=$9*$9; xy+=$3*$9; n++}
 END {
     printf "%.3f", (n*xy - x*y)/sqrt((n*xx - x*x)*(n*yy - y*y))
 }' "$1")"
 
 # CORRELATION BETWEEN COMPLEXITY AND AVERAGE RATING
 # I used the same technique as "corelation_year_rating" but I used the 11th column (Complexity) instead of the 3rd column (Year)
-corelation_complexity_rating="$(awk -F'\t' 'NR>1 {x+=$9; y+=$11; xx+=$9*$9; yy+=$11*$11; xy+=$9*$11; n++}
+correlation_complexity_rating="$(awk -F'\t' 'NR>1 {x+=$9; y+=$11; xx+=$9*$9; yy+=$11*$11; xy+=$9*$11; n++}
 END {
     printf "%.3f", (n*xy - x*y)/sqrt((n*xx - x*x)*(n*yy - y*y))
 }' "$1")"
 
 # Print the correlation results
-echo "The correlation between the year of publication and the average rating is $corelation_year_rating"
-echo "The correlation between the complexity of a game and its average rating is $corelation_complexity_rating"
+echo "The correlation between the year of publication and the average rating is $correlation_year_rating"
+echo "The correlation between the complexity of a game and its average rating is $correlation_complexity_rating"
