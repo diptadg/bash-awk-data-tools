@@ -1,4 +1,4 @@
-# CITS4407 Project 2
+# CITS4407 Assignment 2
 # Authorship: Dipta Datta Gupta
 
 This project contains a set of Bash and AWK scripts specifically designed to get the count of empty cells, preprocess, and analyze a board games dataset file. The scripts ensure data consistency, handle missing values, and provide useful statistics about the dataset.
@@ -57,9 +57,9 @@ Cleans and transforms a raw data file that uses semicolons as field separators. 
 - **Separator Check:** Ensures the data file contains semicolons as the separator, enforcing the expected delimiter.
 - **ID Handling:** Detects and fills empty ID fields by incrementing the highest existing ID, ensuring uniqueness.
 - **Data Cleaning:**  
-  - Converts semicolons to tabs for easier downstream processing.
+  - Converts semicolons to tab separators.
   - Removes non-ASCII characters.
-  - Converts Windows line endings to Unix format.
+  - Converts Windows line endings to Unix line endings.
   - Replaces commas (,) with dots (.) for representing decimal places in columns that have floating-point numbers.
 
 **Output:**  
