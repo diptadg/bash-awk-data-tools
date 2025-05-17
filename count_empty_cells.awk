@@ -1,6 +1,6 @@
 # This AWK script counts the empty cells for each column in the provided data file
 # This script is called from the empty_cells script having passed the file and separator as arguments
-# Authorship: Dipta Datta Gupta 
+# Authorship: Dipta Datta Gupta
 BEGIN {
     # Set the field separator from the input argument in the main script
     FS = separator

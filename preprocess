@@ -10,7 +10,8 @@
 
 # It takes a single argument: the path to the data file.
 # Usage: ./preprocess <file>
-# Authorship: Dipta Datta Gupta 
+# Authorship: Dipta Datta Gupta
+
 
 # Check if the correct number of arguments is provided (file)
 if [ $# -ne 1 ]; then
