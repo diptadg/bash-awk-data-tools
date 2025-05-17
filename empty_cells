@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script counts the number of empty cells in a file and prints the results.
+# This script counts the number of empty cells in a semicolon-separated file and prints the results.
 # It takes two arguments: the path to the file and the separator used in the file.
 # The script uses a separate helper AWK script count_empty_cells.awk to process the file and count the empty cells.
 #

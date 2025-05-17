@@ -57,7 +57,7 @@ while IFS= read -r line; do
   # I use "${!cols[@]}" to iterate over the indices of the cols array 
   # (Reference: https://stackoverflow.com/questions/6723426/looping-over-arrays-printing-both-index-and-value)
   for i in "${!cols[@]}"; do
-    cols[i]=$(echo "${cols[$i]}" | tr ';' '\t' | tr -d '\r' | tr -cd '\11\12\15\40-\176')
+    cols[i]=$(echo "${cols[$i]}" | tr -d '\r' | tr -cd '\11\12\15\40-\176')
     # For all columns except Mechanics and Domains columns (index: 12 and 13), replace commas with dots
     # Here I use $((i+1)) to get the column number (1-based index)
     # I use the -ne operator to check if the column number is not equal to 12 or 13
