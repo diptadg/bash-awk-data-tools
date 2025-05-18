@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# PREPROCESS SCRIPT
+
 # This script processes a data file that has a semicolon ';' as the seperator to clean and transform the data.
 # It replaces semicolons with tabs for separators 
 # Converts floating-point numbers to use dots (.) instead of commas(,) for decimal places 
@@ -10,6 +12,7 @@
 
 # It takes a single argument: the path to the data file.
 # Usage: ./preprocess <file>
+#
 # Authorship: Dipta Datta Gupta
 
 
@@ -52,12 +55,16 @@ while IFS= read -r line; do
         # Update the first field with the new ID
         id="$new_id"
       fi
-  # Perform transformations on the line
+  # Perform line transformations
+  # The IFS variable is set to semicolon (IFS=";") to ensure that the columns are split correctly using semicolons
   IFS=";" read -r -a cols <<< "$other_lines"
-  # Process each column: Convert Microsoft line endings to Unix line endings and remove NON-ASCII characters
+  # Process each column in the cols array
   # I use "${!cols[@]}" to iterate over the indices of the cols array 
   # (Reference: https://stackoverflow.com/questions/6723426/looping-over-arrays-printing-both-index-and-value)
   for i in "${!cols[@]}"; do
+    #Convert Microsoft line endings to Unix line endings and remove NON-ASCII characters
+    # (Reference: https://stackoverflow.com/questions/3337936/remove-non-ascii-characters-from-a-file-in-place-in-unix-shell)
+    # (Reference: https://stackoverflow.com/questions/16768776/convert-line-endings/16768848)
     cols[i]=$(echo "${cols[$i]}" | tr -d '\r' | tr -cd '\11\12\15\40-\176')
     # For all columns except Mechanics and Domains columns (index: 12 and 13), replace commas with dots
     # Here I use $((i+1)) to get the column number (1-based index)

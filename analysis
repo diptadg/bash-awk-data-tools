@@ -1,9 +1,13 @@
 #!/bin/bash
 
+# ANALYSIS SCRIPT
+#
 # This script analyzes a cleaned tab-seperated file containing board game data.
 # It calculates the most popular game mechanics and domains, and the correlation between year and average rating, and complexity and average rating.
+#
 # It takes a single argument: the path to the cleaned tab-separated .TSV file.
 # Usage: ./analysis <file>
+#
 # Authorship: Dipta Datta Gupta
 
 # Check if the correct number of arguments is provided (file and separator)
@@ -56,7 +60,7 @@ most_popular_game_mechanic=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' 
 most_popular_game_mechanic_count=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $1}')
 
 # MOST POPULAR DOMAINS
-# same technique as most_popular_game_mechanics but I used the 14th column (Domains) instead
+# Same technique as most_popular_game_mechanics but I used the 14th column (Domains) instead
 most_popular_domain=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
 
 # Get the count of the most popular domain
