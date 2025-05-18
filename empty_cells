@@ -39,6 +39,6 @@ awk -v separator="$2" -f count_empty_cells.awk "$1"
 
 # Check if the AWK script was executed successfully
 if [ $? -ne 0 ]; then
-    echo "Error: The AWK script failed to process the input file $1" >&2
+    echo "Error: The AWK script failed to process the input file $1" 2 > /dev/stderr
     exit 1
 fi
