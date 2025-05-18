@@ -18,6 +18,7 @@
 
 # Check if the correct number of arguments is provided (file)
 if [ $# -ne 1 ]; then
+    echo "Error: Expected 1 argument, but received $#." 2> /dev/null
     echo "Usage: $0 <file>" 2> /dev/stderr
     exit 1
 fi

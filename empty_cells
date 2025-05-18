@@ -12,7 +12,8 @@
 
 # Check if the correct number of arguments is provided (file and separator)
 if [[ $# -ne 2 ]]; then
-    echo "Usage: <file> '<separator>'"  2> /dev/stderr
+    echo "Error: Expected 2 arguments, but received $#." 2> /dev/null
+    echo "Usage: <file> '<separator>'. Note: Separator must be enclosed using single quotes i.e. ';'"  2> /dev/stderr
     exit 1
 fi
 
@@ -30,7 +31,7 @@ fi
 
 # Check if its a proper separator in the input argument
 if [ "$2" != ";" ]; then
-    echo "Error: Separator must be a semicolon (;) and must be enclosed using single quotes i.e. ';'" 2> /dev/stderr
+    echo "Error: Separator must be a semicolon (;)." 2> /dev/stderr
     exit 1
 fi
 
