@@ -63,7 +63,7 @@ Cleans and transforms a raw data file that uses semicolons as field separators. 
   - Replaces commas (,) with dots (.) for representing decimal places in columns that have floating-point numbers.
 
 **Output:**  
-  Produces a cleaned, tab-separated file named `cleaned_file.tsv`.
+  Outputs a cleaned version of the input data file to stdout.
 
 **Usage:**
 ```bash
