@@ -43,7 +43,7 @@ while IFS= read -r line; do
       IFS=";" read -r id other_lines <<< "$line" 
       # Check if the seperator is a semicolon before processing
       if [[ "$line" != *";"* ]]; then
-      echo -e "Error: Failed to process input file $1. The input file contains separators that are not semicolon (;). Please run the script again with the correct semicolon-separated file.\n Note: This script only takes semicolon-seperated files" 2 > /dev/stderr
+      echo -e "Error: Failed to process input file $1. The input file contains separators that are not semicolon (;). Please run the script again with the correct semicolon-separated file.\n Note: This script only takes semicolon-seperated files" >&2
       exit 1
       fi
     # Check if the first field (ID) is empty
@@ -78,5 +78,5 @@ while IFS= read -r line; do
   # The "${cols[*]}" expands to all elements of the array, separated by the first character of IFS
   # The echo command is used to print the id and the transformed columns
   # The -e option enables interpretation of backslash escapes
-  echo -e "${id}\t$(IFS=$'\t'; echo "${cols[*]}")"
+  echo -e "${id}\t$(IFS=$'\t'; echo "${cols[*]}")" >&2
 done < "$1"
