@@ -8,7 +8,7 @@
 # Converts Microsoft line endings to Unix format
 # Converts non-ASCII characters to ASCII.
 # It also handles empty IDs by incrementing them and ensuring they are unique.
-# The script outputs the cleaned data to a new file named "cleaned_file.tsv".
+# The script outputs the cleaned data to standard output (stdout).
 
 # It takes a single argument: the path to the data file.
 # Usage: ./preprocess <file>
@@ -36,8 +36,6 @@ fi
 # Determine highest ID
 new_id=$(awk -F ";" 'NR > 1 {print $1}' "$1" | sort -n | tail -n 1)
 
-# Use a temporary file for output
-tmpfile=$(mktemp)
 
 # Read the input file line by line
 while IFS= read -r line; do
@@ -45,8 +43,7 @@ while IFS= read -r line; do
       IFS=";" read -r id other_lines <<< "$line" 
       # Check if the seperator is a semicolon before processing
       if [[ "$line" != *";"* ]]; then
-      echo -e "Error: Failed to process input file $1. The input file contains separators that are not semicolon (;). Please run the script again with the correct semicolon-separated file.\n Note: This script only takes semicolon-seperated files" >&2
-      rm -f "$tmpfile"
+      echo -e "Error: Failed to process input file $1. The input file contains separators that are not semicolon (;). Please run the script again with the correct semicolon-separated file.\n Note: This script only takes semicolon-seperated files" 2 > /dev/stderr
       exit 1
       fi
     # Check if the first field (ID) is empty
@@ -81,7 +78,5 @@ while IFS= read -r line; do
   # The "${cols[*]}" expands to all elements of the array, separated by the first character of IFS
   # The echo command is used to print the id and the transformed columns
   # The -e option enables interpretation of backslash escapes
-  echo -e "${id}\t$(IFS=$'\t'; echo "${cols[*]}")" >> "$tmpfile"
+  echo -e "${id}\t$(IFS=$'\t'; echo "${cols[*]}")"
 done < "$1"
-mv "$tmpfile" cleaned_file.tsv
-echo "Processed file saved as cleaned_file.tsv"
