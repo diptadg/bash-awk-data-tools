@@ -53,8 +53,8 @@ fi
 # I used tr to replace the commas with new lines so each game mechanic is on a new line
 # I used awk to remove leading and trailing spaces by using the command {$1=$1; print} (Reference: https://stackoverflow.com/questions/9175801/how-to-remove-leading-and-trailing-whitespaces)
 # I used grep to remove empty lines (Reference: https://stackoverflow.com/questions/3432555/remove-blank-lines-with-grep)
-# Finally, I used awk again at the end again to pipe the second and 3rd outputs only
-most_popular_game_mechanic=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
+# Finally, I used awk again at the end to drop the count (1st field) and print the full name, which can be more than two words
+most_popular_game_mechanic=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{$1=""; print substr($0, 2)}')
 
 # Get the count of the most popular game mechanic
 # I used the same technique as above but I used awk to pipe the 1st output only at the end to get the count of the most popular game mechanic
@@ -62,7 +62,7 @@ most_popular_game_mechanic_count=$(awk -F'\t' 'NR > 1 {print $13}' "$1" | tr ','
 
 # MOST POPULAR DOMAINS
 # Same technique as most_popular_game_mechanics but I used the 14th column (Domains) instead
-most_popular_domain=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2,$3}')
+most_popular_domain=$(awk -F'\t' 'NR > 1 {print $14}' "$1" | tr ',' '\n' | awk '{$1=$1; print}' | grep -v '^$' | sort | uniq -c | sort -nr | head -n 1 | awk '{$1=""; print substr($0, 2)}')
 
 # Get the count of the most popular domain
 # I used the same technique as most_popular_game_mechanics_count but I used the 14th column (Domains) instead
