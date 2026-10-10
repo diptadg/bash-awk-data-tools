@@ -6,7 +6,7 @@
 # It takes two arguments: the path to the file and the separator used in the file.
 #
 # The script uses a separate helper AWK script count_empty_cells.awk to process the file and count the empty cells.
-# Usage: ./count_empty_cells.sh <file> '<separator>'
+# Usage: ./empty_cells <file> '<separator>'
 #
 # Authorship: Dipta Datta Gupta
 
