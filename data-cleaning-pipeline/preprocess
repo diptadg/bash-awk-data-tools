@@ -18,18 +18,18 @@
 
 # Check if the correct number of arguments is provided (file)
 if [ $# -ne 1 ]; then
-    echo "Error: Expected 1 argument, but received $#." 2> /dev/null
-    echo "Usage: $0 <file>" 2> /dev/stderr
+    echo "Error: Expected 1 argument, but received $#." >&2
+    echo "Usage: $0 <file>" >&2
     exit 1
 fi
 # Check if the file exists and is not empty
 if [ ! -s "$1" ]; then
-    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/stderr
+    echo "Error: The specified input file $1 does not exist or is empty." >&2
     exit 1
 fi
 # Check if the file is a regular file
 if [ ! -f "$1" ]; then
-    echo "Error: The specified input file $1 is not a regular file." 2> /dev/stderr
+    echo "Error: The specified input file $1 is not a regular file." >&2
     exit 1
 fi
 

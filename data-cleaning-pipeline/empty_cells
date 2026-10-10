@@ -12,26 +12,26 @@
 
 # Check if the correct number of arguments is provided (file and separator)
 if [[ $# -ne 2 ]]; then
-    echo "Error: Expected 2 arguments, but received $#." 2> /dev/null
-    echo "Usage: <file> '<separator>'. Note: Separator must be enclosed using single quotes i.e. ';'"  2> /dev/stderr
+    echo "Error: Expected 2 arguments, but received $#." >&2
+    echo "Usage: <file> '<separator>'. Note: Separator must be enclosed using single quotes i.e. ';'" >&2
     exit 1
 fi
 
 # Check if the file exists and is not empty
 if [ ! -s "$1" ]; then
-    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/stderr
+    echo "Error: The specified input file $1 does not exist or is empty." >&2
     exit 1
 fi
 
 # Check if the file is a regular file
 if [ ! -f "$1" ]; then
-    echo "Error: The specified input file $1 is not a regular file." 2> /dev/stderr
+    echo "Error: The specified input file $1 is not a regular file." >&2
     exit 1
 fi
 
 # Check if its a proper separator in the input argument
 if [ "$2" != ";" ]; then
-    echo "Error: Separator must be a semicolon (;)." 2> /dev/stderr
+    echo "Error: Separator must be a semicolon (;)." >&2
     exit 1
 fi
 
@@ -40,6 +40,6 @@ awk -v separator="$2" -f count_empty_cells.awk "$1"
 
 # Check if the AWK script was executed successfully
 if [ $? -ne 0 ]; then
-    echo "Error: The AWK script failed to process the input file $1" 2 > /dev/stderr
+    echo "Error: The AWK script failed to process the input file $1" >&2
     exit 1
 fi
