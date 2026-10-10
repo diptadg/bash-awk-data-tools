@@ -11,29 +11,29 @@
 # 3. The type of energy to analyze ('solar_wind' or 'coal').
 # 4. The operation to perform ('min' or 'max').
 # Usage:
-#   ./renewable_stats.sh <csv file path> <country_code | year> <'solar_wind' | 'coal'> <'min' | 'max'>
+#   ./renewable_stats <csv file path> <country_code | year> <'solar_wind' | 'coal'> <'min' | 'max'>
 #
 # Authorship: Dipta Datta Gupta
 
 # Check if exactly 4 arguments are provided
 if [ "$#" -ne 4 ] 
 then
-    echo "Error: Expected 4 arguments, but received $#." 2> /dev/null
-    echo "Usage: $0 <csv file path> <country_code | year> <'solar_wind' | 'coal'> <'min' | 'max'>" 2> /dev/null
+    echo "Error: Expected 4 arguments, but received $#." >&2
+    echo "Usage: $0 <csv file path> <country_code | year> <'solar_wind' | 'coal'> <'min' | 'max'>" >&2
     exit 1
 fi
 
 # Check if the file exists and is not empty
 if [ ! -s "$1" ] 
 then
-    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/null
+    echo "Error: The specified input file $1 does not exist or is empty." >&2
     exit 1
 fi
 
 # Check if the file is a regular file
 if [ ! -f "$1" ] 
 then
-    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    echo "Error: The specified input file $1 is not a regular file." >&2
     exit 1
 fi
 
@@ -42,7 +42,7 @@ if [ "$3" != "solar_wind" ]
 then
     if [ "$3" != "coal" ] 
     then
-        echo "Error: Unknown energy type '$3'. Expected 'solar_wind' or 'coal'." 2> /dev/null
+        echo "Error: Unknown energy type '$3'. Expected 'solar_wind' or 'coal'." >&2
         exit 1
     fi
 fi
@@ -52,7 +52,7 @@ if [ "$4" != "min" ]
 then
     if [ "$4" != "max" ] 
     then
-        echo "Error: Unknown operation '$4'. Expected 'min' or 'max'." 2> /dev/null
+        echo "Error: Unknown operation '$4'. Expected 'min' or 'max'." >&2
         exit 1
     fi
 fi
@@ -101,7 +101,7 @@ fi
 # If identifier is neither a valid year nor a valid country code, guide the user
 if [ "$INVALID_IDENTIFIER" == true ] 
 then
-    echo "Error: Invalid identifier '$2'. It should be a valid year or a 3-digit ISO country code (e.g., 'AUS' or 'USA' for a country code, or '1984' for a year)." 2> /dev/null
+    echo "Error: Invalid identifier '$2'. It should be a valid year or a 3-digit ISO country code (e.g., 'AUS' or 'USA' for a country code, or '1984' for a year)." >&2
     exit 1
 fi
 
@@ -164,8 +164,8 @@ then
 else
     if [ "$IS_COUNTRY_CODE" == true ] 
     then
-        echo "Invalid country code '$2'. The country code is a three-letter ISO country code and is case-sensitive. Please verify and provide the correct country code in the argument" 2> /dev/null
+        echo "Invalid country code '$2'. The country code is a three-letter ISO country code and is case-sensitive. Please verify and provide the correct country code in the argument" >&2
     else
-        echo "No data found for the year '$2'." 2> /dev/null
+        echo "No data found for the year '$2'." >&2
     fi
 fi
