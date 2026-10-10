@@ -1,0 +1,9 @@
+ID;Name;Year Published;Min Players;Max Players;Play Time;Min Age;Users Rated;Rating Average;BGG Rank;Complexity Average;Owned Users;Mechanics;Domains
+1;Lantern Harbor;2015;2;4;60;12;1520;7,45;310;2,80;3100;Hand Management, Set Collection;Strategy Games, Family Games
+2;Copper Orchard;2009;1;5;45;10;980;6,90;845;2,10;2050;Hand Management, Tile Placement;Family Games
+3;Quartz Dominion;2019;2;4;120;14;4210;8,10;95;3,65;8800;Worker Placement, Hand Management;Strategy Games
+;Velvet Comet;2021;3;6;30;8;640;6,55;;1,40;1200;Dice Rolling, Hand Management;Party Games, Family Games
+5;Ashen Lighthouse;1998;2;2;90;14;2300;7,05;520;3,05;;Area Majority / Influence, Dice Rolling;Wargames, Strategy Games
+6;Marigold Express;2012;2;5;75;12;3150;7,60;210;2,55;6400;Network and Route Building, Hand Management;Strategy Games
+7;Citadel of Fen;2005;3;5;180;;1100;6,80;1020;3,90;2600;Variable Player Powers, Dice Rolling;Thematic Games, Strategy Games
+8;Pebble Café;2023;2;4;20;8;310;6,20;1890;1,25;700;Set Collection, Tile Placement;Family Games

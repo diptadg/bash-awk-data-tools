@@ -1,0 +1,10 @@
+Country,Code,Year,SolarWindTWh,CoalTWh
+Northland,NRL,2020,12.5,40.2
+Northland,NRL,2021,15.8,38.9
+Northland,NRL,2022,19.3,38.9
+Southmere,SMR,2020,3.1,95.4
+Southmere,SMR,2021,4.6,97.0
+Southmere,SMR,2022,7.2,91.8
+Eastvale,EVL,2020,0,12.7
+Eastvale,EVL,2021,0.4,12.1
+Eastvale,EVL,2022,1.1,11.6
