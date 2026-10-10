@@ -170,4 +170,5 @@ else
     else
         echo "No data found for the year '$2'." >&2
     fi
+    exit 1
 fi
