@@ -1,0 +1,171 @@
+#!/bin/bash
+
+# This script processes a CSV file containing energy data to determine the minimum or maximum 
+# electrical energy produced by a specific country (or countries) in a particular year, 
+# or the specific year(s) for a given country, based on the provided inputs.
+# It filters the data based on a country code or year, then retrieves the relevant energy type (solar_wind or coal) and performs a min or max operation.
+#
+# The script takes four arguments:
+# 1. The path to the CSV file containing energy data.
+# 2. A 3-digit ISO country code ('AUS' or 'USA') or a year ('1984').
+# 3. The type of energy to analyze ('solar_wind' or 'coal').
+# 4. The operation to perform ('min' or 'max').
+# Usage:
+#   ./renewable_stats.sh <csv file path> <country_code | year> <'solar_wind' | 'coal'> <'min' | 'max'>
+#
+# Authorship: Dipta Datta Gupta
+
+# Check if exactly 4 arguments are provided
+if [ "$#" -ne 4 ] 
+then
+    echo "Error: Expected 4 arguments, but received $#." 2> /dev/null
+    echo "Usage: $0 <csv file path> <country_code | year> <'solar_wind' | 'coal'> <'min' | 'max'>" 2> /dev/null
+    exit 1
+fi
+
+# Check if the file exists and is not empty
+if [ ! -s "$1" ] 
+then
+    echo "Error: The specified input file $1 does not exist or is empty." 2> /dev/null
+    exit 1
+fi
+
+# Check if the file is a regular file
+if [ ! -f "$1" ] 
+then
+    echo "Error: The specified input file $1 is not a regular file." 2> /dev/null
+    exit 1
+fi
+
+# Validate energy type
+if [ "$3" != "solar_wind" ] 
+then
+    if [ "$3" != "coal" ] 
+    then
+        echo "Error: Unknown energy type '$3'. Expected 'solar_wind' or 'coal'." 2> /dev/null
+        exit 1
+    fi
+fi
+
+# Validate operation type (min or max)
+if [ "$4" != "min" ] 
+then
+    if [ "$4" != "max" ] 
+    then
+        echo "Error: Unknown operation '$4'. Expected 'min' or 'max'." 2> /dev/null
+        exit 1
+    fi
+fi
+
+
+# Initialize INVALID_IDENTIFIER to false
+INVALID_IDENTIFIER=false
+
+# Check if the second argument contains only alphabetic characters
+if [ "$(echo "$2" | tr -d -c 'a-zA-Z')" == "$2" ] 
+then
+    # Check if the second argument has 3 characters (ISO country code)
+    if [ ${#2} -eq 3 ] 
+    then
+        IS_COUNTRY_CODE=true
+    else
+        IS_COUNTRY_CODE=false
+    fi
+else
+    IS_COUNTRY_CODE=false
+fi
+
+# Check if the second argument contains only numbers
+if [ "$2" == "$(echo "$2" | tr -d -c '0-9')" ] 
+then
+    # Check if the second argument has 4 digits (year)
+    if [ ${#2} -eq 4 ] 
+    then
+        IS_YEAR=true
+    else
+        IS_YEAR=false
+    fi
+else
+    IS_YEAR=false
+fi
+
+# If neither a valid country code nor a valid year, set INVALID_IDENTIFIER to true
+if [ "$IS_COUNTRY_CODE" == false ] 
+then
+    if [ "$IS_YEAR" == false ] 
+    then
+        INVALID_IDENTIFIER=true
+    fi
+fi
+
+# If identifier is neither a valid year nor a valid country code, guide the user
+if [ "$INVALID_IDENTIFIER" == true ] 
+then
+    echo "Error: Invalid identifier '$2'. It should be a valid year or a 3-digit ISO country code (e.g., 'AUS' or 'USA' for a country code, or '1984' for a year)." 2> /dev/null
+    exit 1
+fi
+
+
+# Determine the column for energy type based on the third argument ($3)
+if [ "$3" == "solar_wind" ] 
+then
+    ENERGY_VALUE_COLUMN=4
+else
+    ENERGY_VALUE_COLUMN=5
+fi
+
+# Filter the data based on the identifier (year or country code) and extract the relevant columns (country, year, and energy)
+FILTERED_DATA=$(grep ",$2," "$1" | cut -d, -f1,2,3,$ENERGY_VALUE_COLUMN)
+
+# Sort data based on energy values
+if [ "$4" == "min" ] 
+then
+    # Sort in ascending order to find the minimum energy value
+    ENERGY_VALUE=$(echo "$FILTERED_DATA" | sort -t, -k4,4n | head -n 1 | cut -d, -f4)
+    # Get all entries with the same minimum value
+    ALL_ENTRIES=$(echo "$FILTERED_DATA" | grep ",$ENERGY_VALUE$")
+else
+    # Sort in descending order to find the maximum energy value
+    ENERGY_VALUE=$(echo "$FILTERED_DATA" | sort -t, -k4,4nr | head -n 1 | cut -d, -f4)
+    # Get all entries with the same maximum value
+    ALL_ENTRIES=$(echo "$FILTERED_DATA" | grep ",$ENERGY_VALUE$")
+fi
+
+# Check if any valid entries are found
+if [ -n "$ALL_ENTRIES" ] 
+then
+    # Determine operation argument (min or max)
+    if [ "$4" == "min" ] 
+    then
+        OPERATION_ARG="minimum"
+    else
+        OPERATION_ARG="maximum"
+    fi
+    # Determine energy type output
+    if [ "$3" == "solar_wind" ] 
+    then
+        ENERGY_TYPE_OUTPUT="solar and wind"
+    else
+        ENERGY_TYPE_OUTPUT="coal"
+    fi
+
+    if [ "$IS_COUNTRY_CODE" == true ] 
+    then
+        # If the identifier is a country code, print the best entry (could be multiple years)
+        # Extract the country name from the first entry
+        COUNTRY_NAME=$(echo "$ALL_ENTRIES" | cut -d, -f1 | head -n 1)
+        echo "The $OPERATION_ARG amount of electrical energy produced from $ENERGY_TYPE_OUTPUT by $COUNTRY_NAME was $ENERGY_VALUE TWh in the following year(s):" 2> /dev/null
+        echo "$ALL_ENTRIES" | cut -d, -f3 2> /dev/null
+    else
+        # If the identifier is a year, print the best entry (could be multiple countries)
+        echo "The $OPERATION_ARG amount of electrical energy produced from $ENERGY_TYPE_OUTPUT in $2 was $ENERGY_VALUE TWh by the following country/countries:" 2> /dev/null
+        echo "$ALL_ENTRIES" | cut -d, -f1 2> /dev/null
+    fi
+else
+    if [ "$IS_COUNTRY_CODE" == true ] 
+    then
+        echo "Invalid country code '$2'. The country code is a three-letter ISO country code and is case-sensitive. Please verify and provide the correct country code in the argument" 2> /dev/null
+    else
+        echo "No data found for the year '$2'." 2> /dev/null
+    fi
+fi
