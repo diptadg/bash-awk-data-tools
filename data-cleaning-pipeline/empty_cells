@@ -36,7 +36,8 @@ if [ "$2" != ";" ]; then
 fi
 
 # Call the AWK script to count empty cells and pass the file and separator as arguments
-awk -v separator="$2" -f count_empty_cells.awk "$1"
+# The AWK script is looked up in the same folder as this script, so empty_cells works from any directory
+awk -v separator="$2" -f "$(dirname "$0")/count_empty_cells.awk" "$1"
 
 # Check if the AWK script was executed successfully
 if [ $? -ne 0 ]; then
