@@ -156,12 +156,12 @@ then
         # If the identifier is a country code, print the best entry (could be multiple years)
         # Extract the country name from the first entry
         COUNTRY_NAME=$(echo "$ALL_ENTRIES" | cut -d, -f1 | head -n 1)
-        echo "The $OPERATION_ARG amount of electrical energy produced from $ENERGY_TYPE_OUTPUT by $COUNTRY_NAME was $ENERGY_VALUE TWh in the following year(s):" 2> /dev/null
-        echo "$ALL_ENTRIES" | cut -d, -f3 2> /dev/null
+        echo "The $OPERATION_ARG amount of electrical energy produced from $ENERGY_TYPE_OUTPUT by $COUNTRY_NAME was $ENERGY_VALUE TWh in the following year(s):"
+        echo "$ALL_ENTRIES" | cut -d, -f3
     else
         # If the identifier is a year, print the best entry (could be multiple countries)
-        echo "The $OPERATION_ARG amount of electrical energy produced from $ENERGY_TYPE_OUTPUT in $2 was $ENERGY_VALUE TWh by the following country/countries:" 2> /dev/null
-        echo "$ALL_ENTRIES" | cut -d, -f1 2> /dev/null
+        echo "The $OPERATION_ARG amount of electrical energy produced from $ENERGY_TYPE_OUTPUT in $2 was $ENERGY_VALUE TWh by the following country/countries:"
+        echo "$ALL_ENTRIES" | cut -d, -f1
     fi
 else
     if [ "$IS_COUNTRY_CODE" == true ] 
